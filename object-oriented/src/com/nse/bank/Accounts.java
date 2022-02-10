@@ -1,5 +1,7 @@
 package com.nse.bank;
 
+import java.util.ArrayList;
+
 /**
  * This class represents general bank account. It is further specialised as savings and current accounts.
  * @author Zubair Shaikh
@@ -12,8 +14,7 @@ public abstract class Accounts implements Bank {
 	
 	private static int autogen = INIT_ACNT_NO;
 	
-	protected Transaction[] txns;
-	protected int idx;
+	protected ArrayList<Transaction> txns;
 	
 	/** Default constructor of accounts*/
 	public Accounts() {
@@ -29,15 +30,14 @@ public abstract class Accounts implements Bank {
 		this.holder = holder;
 		this.balance = balance;
 		
-		txns = new Transaction[10];
-		Transaction t = new Transaction("Cr", balance, balance);
-		txns[idx ++] = t;
+		txns = new ArrayList<Transaction>();
+		txns.add(new Transaction("Cr", balance, balance));
 	}
 	
 	/** Method to deposit money to bank account. */
 	public void deposit(double amount) {
 		balance += amount;
-		txns[idx ++] = new Transaction("Cr", amount, balance);
+		txns.add(new Transaction("Cr", amount, balance));
 	}
 	
 	public abstract void withdraw(double amount) throws BalanceException;
@@ -55,7 +55,7 @@ public abstract class Accounts implements Bank {
 	public void statement() {
 		System.out.println("Statement for the A/C: " + acntNo);
 		System.out.println("Type\tAmount\tBalance");
-		for(int i=0; i<idx; i++)
-			txns[i].print();
+		for(Transaction t : txns)
+			t.print();
 	}
 }
